@@ -4,12 +4,14 @@ export const createProject = (project) => {
     return (dispatch, getState, {getFirebase, getFirestore}) => {
         //initialise getFirestore and store the result in a fn which gives a reference to fb DB
         const firestore = getFirestore();
+        const profile = getState().firebase.profile;
+        const authorId = getState().firebase.auth.uid;
         // adding doc to firestore. its an async op and returns a promise
         firestore.collection('projects').add({
             ...project,
-            authorFirstName: 'Ravi',
-            authorLastName: 'Kumar',
-            authorId: 1234,
+            authorFirstName: profile.firstName,
+            authorLastName: profile.lastName,
+            authorId: authorId,
             createdAt: new Date()
         }).then(() =>{
             dispatch({type: 'CREATE_PROJECT', project: project});
